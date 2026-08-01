@@ -158,6 +158,17 @@ const Books = {
     $('#bsProg').classList.remove('hidden');
     const results = [];
     const tasks = [
+      // iTunes 电子书（JSONP，中文书命中率最好），放最前：去重时优先保留
+      jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=ebook&country=US&limit=15`).then(j => {
+        for (const r of j.results || []) {
+          if (!r.trackName) continue;
+          results.push({
+            id: 'itb:' + r.trackId, title: r.trackName, author: r.artistName || '',
+            publisher: '', year: (r.releaseDate || '').slice(0, 4), pages: null,
+            cover: (r.artworkUrl100 || '').replace('100x100', '300x300')
+          });
+        }
+      }).catch(() => { }),
       fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=15`).then(r => r.json()).then(j => {
         for (const it of j.items || []) {
           const v = it.volumeInfo || {};
@@ -191,7 +202,7 @@ const Books = {
       if (seen.has(k)) return false;
       seen.add(k);
       return true;
-    }).slice(0, 20);
+    }).sort((a, b) => (a.cover ? 0 : 1) - (b.cover ? 0 : 1)).slice(0, 20);
     $('#bsList').innerHTML = '<div class="sec-label">搜索结果</div>' + (this._results.map((r, i) => {
       const inShelf = S.books.some(b => b.id === r.id);
       const pub = [r.publisher, r.year, r.pages ? r.pages + ' 页' : ''].filter(Boolean).join(' · ');
