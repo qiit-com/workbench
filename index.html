@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>个人工作台</title>
+<meta name="theme-color" content="#C98D74">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="app.css?v=12">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ 首页 ═══ -->
+  <main id="home" class="screen">
+    <header class="top">
+      <button class="burger" data-nav="drawer" aria-label="打开菜单">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round">
+          <path d="M1 6.2h24M1 13h24M1 19.8h16"></path>
+        </svg>
+      </button>
+      <h1 id="greet">你好</h1>
+    </header>
+
+    <div class="wcard-wrap">
+      <div id="weatherCard" class="wcard">
+        <div id="dateLine" class="wdate"></div>
+        <div id="wReady" class="hidden">
+          <div class="wtemp-row">
+            <span id="wTemp" class="wtemp">--</span>
+            <span id="wCond" class="wcond"></span>
+          </div>
+          <div class="wsub-row">
+            <span id="wRange" class="wrange"></span>
+            <span id="wCity" class="wcity"></span>
+          </div>
+        </div>
+        <div id="wLoading">
+          <div class="wskel-row1"><span class="skel skel-temp"></span><span class="skel skel-cond"></span></div>
+          <div class="wskel-row2"><span class="skel skel-range"></span><span class="wcity dim">定位中…</span></div>
+        </div>
+        <div id="wIconBox" class="wicon dim2">
+          <svg id="w-sun" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="16" cy="16" r="6"></circle>
+            <path d="M16 4v3.2M16 24.8v3.2M4 16h3.2M24.8 16h3.2M7.5 7.5l2.3 2.3M22.2 22.2l2.3 2.3M24.5 7.5l-2.3 2.3M9.8 22.2l-2.3 2.3"></path>
+          </svg>
+          <svg id="w-partly" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(0.6 1.5)">
+              <circle cx="10.8" cy="10" r="4"></circle>
+              <path d="M10.8 2.8v1.8M3.6 10h1.8M5.7 4.9l1.3 1.3M15.9 4.9l-1.3 1.3"></path>
+              <path d="M13.4 26.2h9.4a4.1 4.1 0 0 0 .4-8.2 5.8 5.8 0 0 0-11-1.2 3.8 3.8 0 0 0 .3 9.4Z"></path>
+            </g>
+          </svg>
+          <svg id="w-cloud" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(16 16) scale(1.15) translate(-16.1 -17.2)" stroke-width="1.57">
+              <path d="M10.6 24.4h11.6a4.6 4.6 0 0 0 .4-9.2 6.4 6.4 0 0 0-12.2-1.3 4.2 4.2 0 0 0 .2 10.5Z"></path>
+            </g>
+          </svg>
+          <svg id="w-rain" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(-0.3 -1.3)">
+              <path d="M10.6 20.4h11.6a4.4 4.4 0 0 0 .4-8.8 6.2 6.2 0 0 0-11.8-1.2 4 4 0 0 0-.2 10Z"></path>
+              <path d="M12 24.2l-1.2 3.8M16.4 24.2l-1.2 3.8M20.8 24.2l-1.2 3.8"></path>
+            </g>
+          </svg>
+          <svg id="w-storm" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(-0.3 -2.7)">
+              <path d="M10.6 20.4h11.6a4.4 4.4 0 0 0 .4-8.8 6.2 6.2 0 0 0-11.8-1.2 4 4 0 0 0-.2 10Z"></path>
+              <path d="M16.8 22.6l-3.6 4.8h3.4l-1 3.4 4.4-5.4h-3.2l1-2.8Z"></path>
+            </g>
+          </svg>
+          <svg id="w-snow" class="hidden" width="52" height="52" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(-0.3 -1.5)">
+              <path d="M10.6 20.4h11.6a4.4 4.4 0 0 0 .4-8.8 6.2 6.2 0 0 0-11.8-1.2 4 4 0 0 0-.2 10Z"></path>
+              <path d="M12 23.6v4.8M9.9 24.8l4.2 2.4M14.1 24.8l-4.2 2.4M20 23.6v4.8M17.9 24.8l4.2 2.4M22.1 24.8l-4.2 2.4" stroke-width="1.5"></path>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-area" id="listArea">
+      <div class="row-title">
+        <span class="rt-label">今日待办</span>
+        <span id="progWrap" class="prog hidden">
+          <span class="prog-bar"><i id="progFill"></i></span>
+          <em id="progNum">0/0</em>
+        </span>
+      </div>
+      <div id="todayList"></div>
+      <div id="overdueSec" class="hidden">
+        <div class="row-title overdue-head">
+          <span class="rt-label">逾期未完成</span>
+          <b id="overdueCount" class="ov-badge">0</b>
+        </div>
+        <div id="overdueList"></div>
+      </div>
+    </div>
+
+    <footer class="newbar-wrap">
+      <button id="btnNew" class="newbar"><b>+</b><span>新建待办…</span><i>◍</i></button>
+    </footer>
+  </main>
+
+  <!-- ═══ 全部待办 ═══ -->
+  <section id="allTodos" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>‹ 返回</button>
+      <span class="pg-title">全部待办</span>
+      <span class="pg-act dim3">▦</span>
+    </header>
+    <div class="mcal-wrap">
+      <div class="mcal glass14" id="atCal"></div>
+    </div>
+    <div class="pg-scroll" id="atList"></div>
+    <footer class="newbar-wrap pad-b">
+      <button id="atNew" class="newbar"><b>+</b><span>新建待办…</span></button>
+    </footer>
+  </section>
+
+  <!-- ═══ 新建 / 编辑待办 ═══ -->
+  <section id="todoEdit" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back id="teCancel">取消</button>
+      <span class="pg-title" id="teTitle">新建待办</span>
+      <button class="pg-act strong" id="teSave">保存</button>
+    </header>
+    <div class="pg-scroll">
+      <div class="card glass14">
+        <textarea id="teName" class="te-name" rows="1" placeholder="要做什么？" maxlength="120"></textarea>
+      </div>
+      <div class="rows" id="teRows">
+        <button class="row" id="teDateRow"><span>日期</span><b id="teDateVal"></b></button>
+        <button class="row" id="teTimeRow"><span>时间</span><b id="teTimeVal" class="dim3">不设时间 ›</b></button>
+        <button class="row hidden" id="teSrcRow"><span>来源</span><b id="teSrcVal" class="dim3"></b></button>
+      </div>
+      <div class="card glass11">
+        <textarea id="teNote" class="te-note" rows="3" placeholder="备注（可选）" maxlength="1000"></textarea>
+      </div>
+      <div class="row solo hidden" id="teFocusRow"><span>专注累计</span><b id="teFocusVal"></b></div>
+      <button class="del-btn hidden" id="teDelete">删除这条待办</button>
+    </div>
+  </section>
+
+  <!-- ═══ 专注进行中 ═══ -->
+  <section id="focusRun" class="screen pg warm hidden">
+    <header class="pg-head loose">
+      <button class="pg-back" id="frClose">✕ 关闭</button>
+      <span class="pg-act dim3" id="frRound">第 1 轮</span>
+    </header>
+    <div class="focus-mid">
+      <div class="focus-ring">
+        <svg width="236" height="236" viewBox="0 0 236 236" style="transform:rotate(-90deg);">
+          <circle cx="118" cy="118" r="108" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="8"></circle>
+          <circle id="frArc" cx="118" cy="118" r="108" fill="none" stroke="#FBF8F5" stroke-width="8" stroke-linecap="round" stroke-dasharray="678.6" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="focus-ring-in">
+          <div id="frTime" class="focus-time">25:00</div>
+          <div class="focus-sub">剩余</div>
+        </div>
+      </div>
+      <div id="frTitle" class="focus-title"></div>
+      <div id="frMeta" class="focus-meta"></div>
+    </div>
+    <footer class="btn-pair">
+      <button class="btn-pri" id="frPause">暂停</button>
+      <button class="btn-sec" id="frEnd">结束这轮</button>
+    </footer>
+  </section>
+
+  <!-- ═══ 专注结束页 ═══ -->
+  <section id="focusEnd" class="screen pg warm hidden">
+    <header class="pg-head loose">
+      <button class="pg-back" id="feClose">✕ 关闭</button>
+      <span class="pg-act dim3" id="feRound">第 1 轮</span>
+    </header>
+    <div class="focus-mid">
+      <div class="focus-cap">本轮结束</div>
+      <div id="feTime" class="focus-big">25:00</div>
+      <div id="feTitle" class="focus-title"></div>
+      <div class="fe-stats">
+        <div class="fe-stat"><b id="feTotal">0 分</b><small>今日累计</small></div>
+        <div class="fe-stat"><b id="feProg" class="green">0/0</b><small>今日待办</small></div>
+      </div>
+      <button class="fe-mark" id="feMark">
+        <i class="t-ring">✓</i><span>顺手标记这条已完成</span>
+      </button>
+    </div>
+    <footer class="btn-pair">
+      <button class="btn-pri" id="feAgain">再来一轮</button>
+      <button class="btn-sec" id="feDone">完成休息</button>
+    </footer>
+  </section>
+
+  <!-- ═══ 选题库 ═══ -->
+  <section id="topicsList" class="screen pg hidden">
+    <header class="top">
+      <button class="burger" data-nav="drawer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M1 6.2h24M1 13h24M1 19.8h16"></path></svg></button>
+      <h1>选题库</h1>
+    </header>
+    <div class="seg-wrap"><div class="seg" id="tpSeg"></div></div>
+    <div class="pg-scroll" id="tpList"></div>
+    <footer class="newbar-wrap pad-b">
+      <button id="tpNew" class="newbar"><b>+</b><span>新建选题…</span></button>
+    </footer>
+  </section>
+
+  <!-- ═══ 选题详情 / 新建 ═══ -->
+  <section id="topicDetail" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back id="tdBack">‹ 选题库</button>
+      <span class="pg-act dim3" id="tdHint">已自动保存</span>
+    </header>
+    <div class="pg-scroll">
+      <textarea id="tdTitle" class="td-title" rows="1" placeholder="选题标题…" maxlength="120"></textarea>
+      <div class="td-status glass12" id="tdStatusRow">
+        <span class="td-st-left"><i id="tdDot"></i><b id="tdState">想法</b><small id="tdStateHint">默认状态</small></span>
+        <button class="mini-btn" id="tdPublish">标记已发布</button>
+      </div>
+      <div class="sec-label">素材与要点</div>
+      <div class="card glass12">
+        <textarea id="tdNotes" class="td-notes" rows="4" placeholder="想到什么都写进来…" maxlength="5000"></textarea>
+      </div>
+      <div class="sec-label">参考链接</div>
+      <div class="rows" id="tdLinks"></div>
+      <div class="sec-label">截图</div>
+      <div class="shot-grid" id="tdShots"></div>
+      <div class="stage-block glass14" id="tdStageBlock"></div>
+      <button class="del-btn" id="tdDelete">删除这个选题</button>
+      <div style="height:20px"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 读书 ═══ -->
+  <section id="booksList" class="screen pg hidden">
+    <header class="top">
+      <button class="burger" data-nav="drawer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M1 6.2h24M1 13h24M1 19.8h16"></path></svg></button>
+      <h1>读书</h1>
+    </header>
+    <div class="search-wrap"><button class="search-fake" id="bkSearchBtn"><i>⌕</i><span>搜书名加书</span></button></div>
+    <div class="seg-wrap"><div class="seg" id="bkSeg"></div></div>
+    <div class="pg-scroll" id="bkList"></div>
+  </section>
+
+  <!-- ═══ 读书搜索 ═══ -->
+  <section id="bookSearch" class="screen pg deep hidden">
+    <header class="search-head">
+      <div class="search-box"><i>⌕</i><input id="bsInput" type="search" placeholder="搜书名" autocomplete="off"><button id="bsClear" class="hidden">✕</button></div>
+      <button data-back>取消</button>
+    </header>
+    <div class="search-prog hidden" id="bsProg"><i></i></div>
+    <div class="pg-scroll" id="bsList"></div>
+  </section>
+
+  <!-- ═══ 书详情 ═══ -->
+  <section id="bookDetail" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>‹ 读书</button>
+      <span></span>
+    </header>
+    <div class="pg-scroll">
+      <div class="bd-head">
+        <div class="bd-cover" id="bdCover"></div>
+        <div class="bd-info">
+          <div id="bdTitle" class="bd-title"></div>
+          <div id="bdAuthor" class="bd-author"></div>
+          <div id="bdPub" class="bd-pub"></div>
+        </div>
+      </div>
+      <div class="chip3" id="bdStates">
+        <button data-st="想读">想读</button>
+        <button data-st="在读">在读</button>
+        <button data-st="读完">读完</button>
+      </div>
+      <div id="bdDoneArea" class="hidden">
+        <div class="card glass12">
+          <div class="sec-label in">我的评分 · 可留空</div>
+          <div class="stars" id="bdStars"></div>
+        </div>
+        <div class="card glass12">
+          <div class="sec-label in">一句话总结</div>
+          <textarea id="bdSummary" class="td-notes" rows="3" placeholder="写点什么…（可以永远不填）" maxlength="2000"></textarea>
+        </div>
+      </div>
+      <button class="row solo strong-row" id="bdAddTodo"><span>添加待办</span><b class="dim2b">选时长与日期 ›</b></button>
+      <button class="btn-pri wide hidden" id="bdSaveRate">保存评分与总结</button>
+      <button class="del-btn" id="bdRemove">从书架移除</button>
+      <div style="height:20px"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 播客 ═══ -->
+  <section id="podList" class="screen pg hidden">
+    <header class="top">
+      <button class="burger" data-nav="drawer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M1 6.2h24M1 13h24M1 19.8h16"></path></svg></button>
+      <h1>播客</h1>
+    </header>
+    <div class="search-wrap"><button class="search-fake" id="pdSearchBtn"><i>⌕</i><span>搜节目或单集</span></button></div>
+    <div class="seg-wrap"><div class="seg" id="pdSeg"></div></div>
+    <div class="pg-scroll" id="pdList"></div>
+  </section>
+
+  <!-- ═══ 播客搜索 ═══ -->
+  <section id="podSearch" class="screen pg deep hidden">
+    <header class="search-head">
+      <div class="search-box"><i>⌕</i><input id="psInput" type="search" placeholder="搜节目或单集" autocomplete="off"><button id="psClear" class="hidden">✕</button></div>
+      <button data-back>取消</button>
+    </header>
+    <div class="search-prog hidden" id="psProg"><i></i></div>
+    <div class="pg-scroll" id="psList"></div>
+  </section>
+
+  <!-- ═══ 节目页 ═══ -->
+  <section id="showPage" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>‹ 播客</button>
+      <span></span>
+    </header>
+    <div class="show-head">
+      <div class="show-cover" id="spCover"></div>
+      <div class="show-info">
+        <div id="spName" class="show-name"></div>
+        <div id="spMeta" class="show-meta"></div>
+        <button class="mini-btn" id="spSub">订阅</button>
+      </div>
+    </div>
+    <div class="pg-scroll">
+      <div class="sec-label">全部单集 · 时间倒序</div>
+      <div id="spEps"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 单集页 ═══ -->
+  <section id="epPage" class="screen pg warm hidden">
+    <div class="ep-top">
+      <button class="pg-back" data-back id="epBack">‹ 播客</button>
+      <div id="epTitle" class="ep-title"></div>
+      <div class="ep-meta-row">
+        <span id="epMeta" class="ep-meta"></span>
+        <button class="mini-btn fixed" id="epListBtn">移出想听</button>
+      </div>
+      <div class="ep-prog-row">
+        <span id="epPos" class="ep-ts">0:00</span>
+        <span class="ep-bar" id="epBar"><i id="epFill"></i></span>
+        <span id="epLeft" class="ep-ts">-0:00</span>
+      </div>
+      <div class="ep-controls">
+        <button class="ep-skip" id="epBack10">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="12" cy="13" r="7.6"></circle>
+            <path d="M13.2 1.6v6L8.2 4.6Z" fill="currentColor" stroke="none"></path>
+            <text x="12" y="16.4" text-anchor="middle" font-size="8.6" font-weight="700" fill="currentColor" stroke="none">10</text>
+          </svg>
+        </button>
+        <button class="ep-play" id="epPlay">
+          <svg id="epIcoPlay" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6c0 .9 1 1.5 1.8 1L20 13c.8-.5.8-1.6 0-2.1L9.8 4.2c-.8-.5-1.8.1-1.8 1Z"></path></svg>
+          <svg id="epIcoPause" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.6"></rect><rect x="14" y="4" width="4" height="16" rx="1.6"></rect></svg>
+        </button>
+        <button class="ep-skip" id="epFwd10">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="12" cy="13" r="7.6"></circle>
+            <path d="M10.8 1.6v6L15.8 4.6Z" fill="currentColor" stroke="none"></path>
+            <text x="12" y="16.4" text-anchor="middle" font-size="8.6" font-weight="700" fill="currentColor" stroke="none">10</text>
+          </svg>
+        </button>
+      </div>
+      <div class="ep-speeds" id="epSpeeds"></div>
+    </div>
+    <div class="pg-scroll">
+      <div class="row-title tight"><span class="rt-label strong2" id="epNoteCount">笔记 0 条</span><span class="dim3s">点时间戳跳转</span></div>
+      <div id="epNotes"></div>
+    </div>
+    <footer class="newbar-wrap pad-b">
+      <button id="epAddNote" class="newbar"><b>+</b><span id="epAddNoteLabel">记一条…</span></button>
+    </footer>
+  </section>
+
+  <!-- ═══ 笔记编辑 ═══ -->
+  <section id="noteEdit" class="screen pg warm hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>取消</button>
+      <span class="pg-title" id="neTitle">新建笔记</span>
+      <button class="pg-act strong" id="neSave">保存</button>
+    </header>
+    <div class="pg-scroll">
+      <div class="ne-ts-card glass12">
+        <b id="neTs" class="ts-chip">0:00</b>
+        <span id="neEp" class="dim3s"></span>
+      </div>
+      <div class="chip3 small">
+        <button id="neM5">− 5 秒</button>
+        <button id="neNow">取当前位置</button>
+        <button id="neP5">+ 5 秒</button>
+      </div>
+      <div class="card glass14">
+        <textarea id="neText" class="td-notes big" rows="6" placeholder="记点什么…" maxlength="2000"></textarea>
+      </div>
+      <button class="del-btn hidden" id="neDelete">删除这条笔记</button>
+    </div>
+  </section>
+
+  <!-- ═══ 运动 ═══ -->
+  <section id="sportHome" class="screen pg hidden">
+    <header class="top">
+      <button class="burger" data-nav="drawer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M1 6.2h24M1 13h24M1 19.8h16"></path></svg></button>
+      <h1>运动</h1>
+      <span class="top-note" id="shMonthCount"></span>
+    </header>
+    <div class="mcal-wrap"><div class="mcal glass14" id="shCal"></div></div>
+    <div class="pg-scroll" id="shList"></div>
+    <footer class="btn-pair pad-b2">
+      <button class="btn-pri" id="shRecord">记一次</button>
+      <button class="btn-sec" id="shPlan">安排一次</button>
+    </footer>
+  </section>
+
+  <!-- ═══ 运动类型选择 ═══ -->
+  <section id="sportType" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>取消</button>
+      <span class="pg-title" id="stTitle">记一次</span>
+      <span style="width:40px"></span>
+    </header>
+    <div class="pg-scroll" id="stGroups"></div>
+  </section>
+
+  <!-- ═══ 计时类 / 球类表单 ═══ -->
+  <section id="sportTimed" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back id="sfBack">‹ 跑步</button>
+      <span></span>
+      <button class="pg-act strong" id="sfSave">保存</button>
+    </header>
+    <div class="pg-scroll">
+      <div class="rows">
+        <button class="row" id="sfDurRow"><span>时长</span><b id="sfDurVal">30 分钟 ›</b></button>
+        <button class="row hidden" id="sfDistRow"><span>距离</span><b id="sfDistVal" class="dim3">不记 ›</b></button>
+        <button class="row" id="sfDateRow"><span>日期</span><b id="sfDateVal"></b></button>
+      </div>
+      <div class="sec-label">感受</div>
+      <div class="chip3" id="sfFeel">
+        <button data-f="吃力">吃力</button>
+        <button data-f="正常" class="on">正常</button>
+        <button data-f="轻松">轻松</button>
+      </div>
+      <div class="row solo hidden" id="sfSrcRow"><span>来源</span><b id="sfSrcVal" class="dim3"></b></div>
+      <button class="del-btn hidden" id="sfDelete">删除这次记录</button>
+    </div>
+  </section>
+
+  <!-- ═══ 力量训练表单 ═══ -->
+  <section id="sportStrength" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back id="ssBack">取消</button>
+      <span class="pg-title">力量训练</span>
+      <button class="pg-act strong" id="ssSave">保存</button>
+    </header>
+    <div class="ss-meta" id="ssMeta">
+      <button id="ssDateBtn" class="ss-meta-btn"></button>
+      <span id="ssPlanTag" class="green-note hidden"></span>
+    </div>
+    <div class="parts-wrap" id="ssParts"></div>
+    <div class="pg-scroll">
+      <div class="row-title tight"><span class="rt-label" id="ssPartInfo"></span><span class="dim3s">重量 × 次数 × 组数</span></div>
+      <div id="ssLifts"></div>
+      <button class="dash-btn" id="ssAddLift">+ 从动作库添加</button>
+      <button class="del-btn hidden" id="ssDelete">删除这次训练</button>
+      <div style="height:16px"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 动作库 ═══ -->
+  <section id="sportLib" class="screen pg deep hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>取消</button>
+      <span class="pg-title" id="slTitle">动作库</span>
+      <button class="pg-act strong" id="slDone">完成</button>
+    </header>
+    <div class="sec-label" id="slCount"></div>
+    <div class="pg-scroll" id="slList"></div>
+  </section>
+
+  <!-- ═══ 饮食 ═══ -->
+  <section id="mealHome" class="screen pg hidden">
+    <header class="top">
+      <button class="burger" data-nav="drawer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M1 6.2h24M1 13h24M1 19.8h16"></path></svg></button>
+      <h1>饮食</h1>
+    </header>
+    <div class="mcal-wrap"><div class="mcal glass14" id="mhCal"></div></div>
+    <div class="pg-scroll" id="mhList"></div>
+    <footer class="newbar-wrap pad-b">
+      <button id="mhExtra" class="newbar"><b>+</b><span>加一餐（加餐 / 夜宵）…</span></button>
+    </footer>
+  </section>
+
+  <!-- ═══ 记录 / 编辑一餐 ═══ -->
+  <section id="mealEdit" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back id="meBack">取消</button>
+      <span class="pg-title" id="meTitle">记录 · 午餐</span>
+      <button class="pg-act strong" id="meSave">保存</button>
+    </header>
+    <div class="pg-scroll">
+      <div class="card glass14">
+        <div class="sec-label in">吃了什么</div>
+        <textarea id="meText" class="td-notes" rows="2" placeholder="一句话就行…" maxlength="500"></textarea>
+      </div>
+      <div class="sec-label">饭量 · 必选</div>
+      <div class="chip3" id="meAmount">
+        <button data-a="少">少</button>
+        <button data-a="正常" class="on">正常</button>
+        <button data-a="偏多">偏多</button>
+      </div>
+      <div class="rows">
+        <button class="row" id="meSlotRow"><span>餐次</span><b id="meSlotVal"></b></button>
+        <button class="row" id="meTimeRow"><span>时间</span><b id="meTimeVal"></b></button>
+        <button class="row" id="meDateRow"><span>日期</span><b id="meDateVal"></b></button>
+      </div>
+      <div class="sec-label">照片 · 可选，最多 9 张</div>
+      <div class="shot-grid four" id="mePhotos"></div>
+      <button class="del-btn hidden" id="meDelete">删除这一餐</button>
+      <div style="height:16px"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 设置 ═══ -->
+  <section id="settings" class="screen pg hidden">
+    <header class="pg-head">
+      <button class="pg-back" data-back>‹ 返回</button>
+      <span class="pg-title">设置</span>
+      <span style="width:40px"></span>
+    </header>
+    <div class="pg-scroll">
+      <div class="card glass11">
+        <div class="sec-label in">称呼</div>
+        <div class="set-name-row">
+          <input id="setName" class="set-input" type="text" maxlength="20" autocomplete="off">
+          <button class="btn-pri small" id="setNameSave">保存</button>
+        </div>
+      </div>
+      <div class="card glass11">
+        <div class="sec-label in">数据</div>
+        <p class="set-desc">全部数据保存在本机，不上传服务器。换设备前记得先导出。</p>
+        <div class="btn-pair in">
+          <button class="btn-sec strong3" id="setExport">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11"></path><path d="M7.5 10.5 12 15l4.5-4.5"></path><path d="M4.5 19.5h15"></path></svg>
+            导出
+          </button>
+          <button class="btn-sec" id="setImport">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"></path><path d="M7.5 8.5 12 4l4.5 4.5"></path><path d="M4.5 19.5h15"></path></svg>
+            导入
+          </button>
+        </div>
+        <div class="set-sub" id="setDataInfo"></div>
+      </div>
+      <div class="card glass11">
+        <div class="sec-label in">关于</div>
+        <div class="about-row"><span>版本</span><b>0.1.0</b></div>
+        <div class="about-row last"><span>源码与教程</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"><path d="M13 4h7v7"></path><path d="M20 4 11 13"></path><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19V7.5A1.5 1.5 0 0 1 5 6h4.5"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 抽屉 ═══ -->
+  <div id="drawerWrap" class="drawer-wrap hidden">
+    <nav class="drawer">
+      <div class="dw-head">
+        <span>我的工作台</span>
+        <button id="btnNavClose" class="dw-close">✕</button>
+      </div>
+      <div class="dw-item" data-mod="todo">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"></circle><path d="M8.4 12.2l2.5 2.4 4.7-5"></path></svg></span>
+        <span class="dw-txt"><b>待办</b><small id="dwTodoSub"></small></span>
+      </div>
+      <div class="dw-group">自媒体</div>
+      <div class="dw-item" data-mod="topics">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="6.6" width="12.4" height="10.8" rx="3"></rect><path d="M16.4 11.2l4.2-2.6v6.8l-4.2-2.6z"></path></svg></span>
+        <span class="dw-txt"><b>选题库</b><small id="dwTopicsSub"></small></span>
+      </div>
+      <div class="dw-group">学习</div>
+      <div class="dw-item" data-mod="books">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.6C10.4 5.4 8.4 5 5.2 5.2v12c3-.2 5 .2 6.8 1.6 1.8-1.4 3.8-1.8 6.8-1.6v-12C15.6 5 13.6 5.4 12 6.6Z"></path><path d="M12 6.6v12.2"></path></svg></span>
+        <span class="dw-txt"><b>读书</b><small id="dwBooksSub"></small></span>
+      </div>
+      <div class="dw-item" data-mod="podcast">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 10.4v3.2M8.4 7.6v8.8M11.8 5v14M15.2 8.4v7.2M18.6 10.8v2.4"></path></svg></span>
+        <span class="dw-txt"><b>播客</b><small id="dwPodSub"></small></span>
+      </div>
+      <div class="dw-group">生活</div>
+      <div class="dw-item" data-mod="sport">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.6 9.2v5.6M7.4 7.4v9.2M16.6 7.4v9.2M19.4 9.2v5.6M7.4 12h9.2"></path></svg></span>
+        <span class="dw-txt"><b>运动</b><small id="dwSportSub"></small></span>
+      </div>
+      <div class="dw-item" data-mod="meal">
+        <span class="dw-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 4.6v6.2a2.4 2.4 0 0 0 4.8 0V4.6M9.8 11v8.4"></path><path d="M16.4 4.6c1.6.8 2.4 2.4 2.2 4.4-.14 1.5-.9 2.4-2.2 2.6v7.8"></path></svg></span>
+        <span class="dw-txt"><b>饮食</b><small id="dwMealSub"></small></span>
+      </div>
+      <div class="dw-spacer"></div>
+      <div class="dw-item dw-settings" data-mod="settings">
+        <span class="dw-ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"></circle><path d="M12 3.6v2.2M12 18.2v2.2M4.6 12H6.8M17.2 12h2.2M6.8 6.8l1.6 1.6M15.6 15.6l1.6 1.6M17.2 6.8l-1.6 1.6M8.4 15.6l-1.6 1.6"></path></svg></span>
+        <span class="dw-txt"><b>设置</b></span>
+      </div>
+    </nav>
+    <div id="drawerMask" class="drawer-mask"></div>
+  </div>
+
+  <!-- ═══ 日期弹层 ═══ -->
+  <div id="dateSheetWrap" class="sheet-wrap hidden">
+    <div class="sheet-mask" data-sheet-close="date"></div>
+    <div class="sheet dark">
+      <div class="sheet-head">
+        <button id="dsClear">不设日期</button>
+        <b id="dsTitle">选择日期</b>
+        <button id="dsOk" class="strong">确定</button>
+      </div>
+      <div class="mcal" id="dsCal"></div>
+    </div>
+  </div>
+
+  <!-- ═══ 时间弹层 ═══ -->
+  <div id="timeSheetWrap" class="sheet-wrap hidden">
+    <div class="sheet-mask" data-sheet-close="time"></div>
+    <div class="sheet dark">
+      <div class="sheet-head">
+        <button id="tsClear">不设时间</button>
+        <b>选择时间</b>
+        <button id="tsOk" class="strong">确定</button>
+      </div>
+      <div class="quick-chips" id="tsQuick">
+        <button data-t="09:00">早 9:00</button>
+        <button data-t="12:00">中午 12:00</button>
+        <button data-t="14:00">下午 14:00</button>
+        <button data-t="20:00">晚 20:00</button>
+      </div>
+      <div class="wheel-labels"><span>时</span><span>分</span></div>
+      <div class="wheelbox2" id="tsBox">
+        <div class="wheel-hl2"></div>
+        <ul class="wheel2" id="tsH"></ul>
+        <div class="wheel-div"></div>
+        <ul class="wheel2" id="tsM"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 通用滚轮弹层 ═══ -->
+  <div id="wheelSheetWrap" class="sheet-wrap hidden">
+    <div class="sheet-mask" data-sheet-close="wheel"></div>
+    <div class="sheet dark">
+      <div class="sheet-head">
+        <button id="wsClear">清空</button>
+        <b id="wsTitle"></b>
+        <button id="wsOk" class="strong">确定</button>
+      </div>
+      <div class="quick-chips hidden" id="wsQuick"></div>
+      <div class="wheel-labels hidden" id="wsLabels"></div>
+      <div class="wheelbox2" id="wsBox"><div class="wheel-hl2"></div></div>
+      <div class="ws-last hidden" id="wsLast"></div>
+    </div>
+  </div>
+
+  <!-- ═══ 读书·添加待办浮层 ═══ -->
+  <div id="readSheetWrap" class="sheet-wrap hidden">
+    <div class="sheet-mask" data-sheet-close="read"></div>
+    <div class="sheet dark">
+      <div class="sheet-head">
+        <button data-sheet-close="read">取消</button>
+        <b>添加待办</b>
+        <span style="width:34px"></span>
+      </div>
+      <div class="sec-label in2">读多久</div>
+      <div class="chip3 small gap" id="rsDur">
+        <button data-d="30" class="on">30 分钟</button>
+        <button data-d="45">45 分钟</button>
+        <button data-d="60">1 小时</button>
+      </div>
+      <div class="sec-label in2">排到哪天</div>
+      <div class="scheme-chips" id="rsScheme"></div>
+      <div class="mcal mini hidden" id="rsCal"></div>
+      <button class="btn-glass wide" id="rsAdd">添加</button>
+    </div>
+  </div>
+
+  <!-- ═══ 确认弹窗 ═══ -->
+  <div id="confirmWrap" class="confirm-wrap hidden">
+    <div class="confirm-box">
+      <div id="cfTitle" class="cf-title"></div>
+      <div id="cfText" class="cf-text"></div>
+      <div class="cf-btns">
+        <button id="cfCancel">取消</button>
+        <button id="cfOk" class="danger">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="filePick" accept="image/*" multiple class="hidden">
+  <div id="toast" class="toast hidden"></div>
+  <div id="vpDebug" class="vp-debug"></div>
+</div>
+
+<script src="js/lunar.js?v=12"></script>
+<script src="js/db.js?v=12"></script>
+<script src="js/core.js?v=12"></script>
+<script src="js/app.js?v=12"></script>
+<script src="js/topics.js?v=12"></script>
+<script src="js/books.js?v=12"></script>
+<script src="js/podcast.js?v=12"></script>
+<script src="js/sport.js?v=12"></script>
+<script src="js/meal.js?v=12"></script>
+<script>Boot();</script>
+</body>
+</html>
