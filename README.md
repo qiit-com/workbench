@@ -1,10 +1,11 @@
-# 个人工作台 Workbench
+# 暮色 Dusk · 个人工作台
 
-一个纯本地的个人工作台 PWA：待办 · 专注 · 选题库 · 读书 · 播客 · 运动 · 饮食。
+一个纯本地的个人工作台 PWA：待办 · 专注 · 选题库 · 读书 · 播客 · 运动 · 饮食。从暖橙暮色渐入青灰夜色的玻璃拟态设计，因此得名「暮色」。
 
 无后端、无账号、无云同步——所有数据存在你自己设备的 IndexedDB 里，支持一键导出 / 导入迁移。
 
-在线体验：**https://workbench.qiit.com**
+在线预览：**https://workbench.qiit.com/dusk/app/**
+详情页：https://workbench.qiit.com/dusk/ · 工作台合集：https://workbench.qiit.com
 
 ## 特性
 
