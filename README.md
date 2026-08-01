@@ -25,22 +25,6 @@
 
 外部数据源（均为免费公开接口）：Open-Meteo（天气/地理编码）、myip.ipip.net / ipapi.co（IP 归属地）、Google Books / OpenLibrary（书目）、iTunes Search API（播客）。
 
-## 本地运行
-
-```bash
-python3 serve.py        # http://localhost:8788（禁缓存的开发服务器）
-```
-
-或任何静态服务器均可。注意：定位、剪贴板等能力需要 HTTPS 或 localhost。
-
-## 部署
-
-任意静态托管即可，无需构建。例如 Cloudflare Pages：
-
-```bash
-wrangler pages deploy . --project-name=workbench
-```
-
 ## 数据与隐私
 
 全部数据只存在浏览器本地（IndexedDB），不上传任何服务器。换设备前用 设置 → 导出 生成 JSON 备份（含照片），新设备上 设置 → 导入 即可。
