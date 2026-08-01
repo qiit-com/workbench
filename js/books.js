@@ -157,41 +157,18 @@ const Books = {
     const seq = ++this.searchSeq;
     $('#bsProg').classList.remove('hidden');
     const results = [];
-    const tasks = [
-      // iTunes 电子书（JSONP，中文书命中率最好），放最前：去重时优先保留
-      jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=ebook&country=US&limit=15`).then(j => {
-        for (const r of j.results || []) {
-          if (!r.trackName) continue;
-          results.push({
-            id: 'itb:' + r.trackId, title: r.trackName, author: r.artistName || '',
-            publisher: '', year: (r.releaseDate || '').slice(0, 4), pages: null,
-            cover: (r.artworkUrl100 || '').replace('100x100', '300x300')
-          });
-        }
-      }).catch(() => { }),
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=15`).then(r => r.json()).then(j => {
-        for (const it of j.items || []) {
-          const v = it.volumeInfo || {};
-          results.push({
-            id: 'gb:' + it.id, title: v.title || '', author: (v.authors || []).join('、'),
-            publisher: v.publisher || '', year: (v.publishedDate || '').slice(0, 4),
-            pages: v.pageCount || null,
-            cover: v.imageLinks ? (v.imageLinks.thumbnail || '').replace('http://', 'https://') : ''
-          });
-        }
-      }).catch(() => { }),
-      fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=15&fields=key,title,author_name,first_publish_year,number_of_pages_median,publisher,cover_i`).then(r => r.json()).then(j => {
-        for (const d of j.docs || []) {
-          results.push({
-            id: 'ol:' + d.key, title: d.title || '', author: (d.author_name || []).slice(0, 2).join('、'),
-            publisher: (d.publisher || [])[0] || '', year: d.first_publish_year ? String(d.first_publish_year) : '',
-            pages: d.number_of_pages_median || null,
-            cover: d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg` : ''
-          });
-        }
-      }).catch(() => { })
-    ];
-    await Promise.all(tasks);
+    // 书目数据源：iTunes 电子书（JSONP 纯前端可调，中文覆盖好，自带封面）
+    try {
+      const j = await jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=ebook&country=US&limit=25`);
+      for (const r of j.results || []) {
+        if (!r.trackName) continue;
+        results.push({
+          id: 'itb:' + r.trackId, title: r.trackName, author: r.artistName || '',
+          publisher: '', year: (r.releaseDate || '').slice(0, 4), pages: null,
+          cover: (r.artworkUrl100 || '').replace('100x100', '300x300')
+        });
+      }
+    } catch (e) { }
     if (seq !== this.searchSeq) return;   // 已作废
     $('#bsProg').classList.add('hidden');
     // 去重 + 有标题的排前
