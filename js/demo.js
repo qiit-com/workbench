@@ -235,10 +235,11 @@ const DEMO = {
   ]
 };
 
-const DEMO_VER = 2;
+const DEMO_VER = 3;
 
 async function seedDemo() {
-  if (((await DB.getMeta('seedDemo')) || 0) >= DEMO_VER) return;
+  const ver = (await DB.getMeta('seedDemo')) || 0;
+  if (ver >= DEMO_VER) return;
   const now = Date.now();
   const T = todayStr();
   const D = n => addDays(T, n);
@@ -284,27 +285,51 @@ async function seedDemo() {
   ];
   for (const t of topics) await DB.putTopics(t);
 
-  /* ── 待办（含选题阶段、读书回链、逾期、明天） ── */
+  /* ── 待办 ── */
+  // 清掉旧版演示待办
+  for (let i = 1; i <= 7; i++) await DB.delTodos('demo-td' + i);
+  for (let off = -10; off <= 40; off++) for (let k = 0; k < 2; k++) await DB.delTodos(`demo-v3-${off}-${k}`);
+
   const mkTodo = (id, title, date, time, src, extra) => ({
     id, title, note: '', date, time, src: src || null,
     done: false, doneAt: null, focusMin: 0, focusRounds: 0,
     createdAt: now - 864e5, updatedAt: now - 864e5, ...(extra || {})
   });
   const srcTp1 = st => ({ type: 'topic', id: 'demo-tp1', label: '选题库', stage: st });
-  const todos = [
+  // 选题阶段待办：昨天已完成 / 今天 / 明天
+  const linked = [
     mkTodo('demo-td1', '写脚本：AI 工具横评：这 6 个我每天真的在用', D(-1), '14:00', srcTp1('写脚本'),
       { done: true, doneAt: now - 864e5, focusMin: 50, focusRounds: 2 }),
     mkTodo('demo-td2', '拍摄：AI 工具横评：这 6 个我每天真的在用', T, '10:00', srcTp1('拍摄')),
     mkTodo('demo-td3', '剪辑：AI 工具横评：这 6 个我每天真的在用', D(1), '14:00', srcTp1('剪辑')),
     mkTodo('demo-td4', '读《白夜行》30 分钟', D(-3), null,
-      { type: 'book', id: 'ol:/works/OL19755009W', label: '读书' }),
-    mkTodo('demo-td5', '给旧视频补封面', D(-2), null, { type: null, id: null, label: '选题库' }),
-    mkTodo('demo-td6', '整理上月账目', D(-6), null, null),
-    mkTodo('demo-td7', '回复合作邮件', T, '16:00', null)
+      { type: 'book', id: 'ol:/works/OL19755009W', label: '读书' })
   ];
-  for (const t of todos) await DB.putTodos(t);
+  for (const t of linked) await DB.putTodos(t);
 
-  /* ── 运动：记录（绿点）/ 今日计划 / 未来计划（白点）/ 过期计划（灰点） ── */
+  // 每天 2 条，从一周前铺到下个月：过去约三分之一没做完（自然形成逾期）
+  const POOL = [
+    ['晨间写作 30 分钟', '09:00'],
+    ['回复合作邮件', '16:00'],
+    ['整理截图素材', '14:00'],
+    ['读《三体》30 分钟', '21:30', { type: 'book', id: 'ol:/works/OL17267881W', label: '读书' }],
+    ['给视频写 3 个备选标题', '11:00'],
+    ['清理相册和下载文件夹', '20:00'],
+    ['周复盘 20 分钟', '19:00'],
+    ['选题头脑风暴 15 分钟', '10:30'],
+    ['备份工作硬盘', '15:00'],
+    ['学英语 20 分钟', '08:30']
+  ];
+  for (let off = -7; off <= 35; off++) {
+    for (let k = 0; k < 2; k++) {
+      const p = POOL[(((off + 7) * 2 + k) % POOL.length + POOL.length) % POOL.length];
+      const done = off < 0 && ((off + k) % 3 !== 0);
+      await DB.putTodos(mkTodo(`demo-v3-${off}-${k}`, p[0], D(off), p[1], p[2] || null,
+        done ? { done: true, doneAt: now + off * 864e5 } : {}));
+    }
+  }
+
+  /* ── 运动 ── */
   const mkSport = (id, type, kind, date, extra) => ({
     id, type, kind, date, planned: false, doneFromPlan: false,
     duration: 30, distance: null, feel: '正常', lifts: [],
@@ -322,13 +347,13 @@ async function seedDemo() {
     mkSport('demo-sp4', '跑步', 'timed', D(-8), { duration: 28, distance: 4.5, feel: '轻松' }),
     mkSport('demo-sp5', '游泳', 'timed', D(-11), { duration: 40, distance: 1.0 }),
     mkSport('demo-sp6', '力量训练', 'strength', D(-14), { duration: 50, feel: null, lifts: backLifts.slice(0, 2) }),
-    mkSport('demo-sp7', '力量训练', 'strength', T, { planned: true, duration: 45 }),       // 今日计划（可一键完成）
-    mkSport('demo-sp8', '游泳', 'timed', D(3), { planned: true, duration: 40 }),          // 未来白点
-    mkSport('demo-sp9', '跑步', 'timed', D(-2), { planned: true, duration: 30 })          // 过期灰点（可改期）
+    mkSport('demo-sp7', '力量训练', 'strength', T, { planned: true, duration: 45 }),
+    mkSport('demo-sp8', '游泳', 'timed', D(3), { planned: true, duration: 40 }),
+    mkSport('demo-sp9', '跑步', 'timed', D(-2), { planned: true, duration: 30 })
   ];
   for (const s of sports) await DB.putSports(s);
 
-  /* ── 饮食：今天两餐 + 过去几天（绿点/浅点相间） ── */
+  /* ── 饮食 ── */
   const mkMeal = (id, date, slot, time, text, amount) => ({
     id, date, slot, time, text, amount, photos: [],
     createdAt: now - 864e5, updatedAt: now - 864e5

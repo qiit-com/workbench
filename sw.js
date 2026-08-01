@@ -1,5 +1,5 @@
 // 应用壳缓存：本地资源缓存优先，天气/书目/播客等跨域请求只走网络
-const CACHE = 'wb-v13';
+const CACHE = 'wb-v14';
 const ASSETS = [
   './', './index.html', './app.css',
   './js/core.js', './js/app.js', './js/db.js', './js/demo.js', './js/lunar.js',
