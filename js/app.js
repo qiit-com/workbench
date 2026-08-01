@@ -24,6 +24,7 @@ async function Boot() {
   await DB.open();
   S.userName = (await DB.getMeta('userName')) || '杨错';
   await seedIfNeeded();
+  await seedDemo();
   [S.todos, S.topics, S.books, S.shows, S.episodes, S.sports, S.meals] = await Promise.all([
     DB.allTodos(), DB.allTopics(), DB.allBooks(), DB.allShows(), DB.allEpisodes(), DB.allSports(), DB.allMeals()
   ]);
