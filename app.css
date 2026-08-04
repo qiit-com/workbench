@@ -548,6 +548,14 @@ textarea { resize: none; }
 .about-row span { font-size: 15px; color: #fff; }
 .about-row b { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.8); font-variant-numeric: tabular-nums; }
 
+.sync-code {
+  width: 100%; padding: 13px 15px; border-radius: 14px; text-align: center;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 15px; letter-spacing: 0.06em; color: #fff;
+  margin-bottom: 10px;
+}
+.cf-text { white-space: pre-line; }
+
 /* ── 抽屉 ── */
 .drawer-wrap { position: absolute; inset: 0; display: flex; z-index: 30; }
 .drawer {

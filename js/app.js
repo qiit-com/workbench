@@ -54,17 +54,18 @@ async function Boot() {
     if (!document.hidden && (!S.weather || Date.now() - S.weather.ts > 30 * 60e3)) initWeather();
   });
   await Focus.restore();
+  await Sync.init();
 }
 
 async function seedIfNeeded() {
   if (await DB.getMeta('seeded')) return;
   const t = todayStr();
-  const mk = (title, note, date, time, src) =>
-    ({ id: uid(), title, note, date, time, src, done: false, doneAt: null, focusMin: 0, focusRounds: 0, createdAt: Date.now(), updatedAt: Date.now() });
+  const mk = (id, title, note, date, time, src) =>
+    ({ id, title, note, date, time, src, done: false, doneAt: null, focusMin: 0, focusRounds: 0, createdAt: Date.now(), updatedAt: Date.now() });
   const seed = [
-    mk('定下周 3 个备选选题', '从选题库里挑 8 条，按可拍性排序，只留 3 条。', t, '10:00', { type: null, id: null, label: '选题库' }),
-    mk('读《创新者的窘境》30 分钟', '读第 6 章，重点看「资源依赖」那部分。', t, '21:30', { type: null, id: null, label: '读书' }),
-    mk('整理旧素材硬盘', '', null, null, null)
+    mk('seed-td1', '定下周 3 个备选选题', '从选题库里挑 8 条，按可拍性排序，只留 3 条。', t, '10:00', { type: null, id: null, label: '选题库' }),
+    mk('seed-td2', '读《创新者的窘境》30 分钟', '读第 6 章，重点看「资源依赖」那部分。', t, '21:30', { type: null, id: null, label: '读书' }),
+    mk('seed-td3', '整理旧素材硬盘', '', null, null, null)
   ];
   for (const s of seed) await DB.putTodos(s);
   await DB.setMeta('seeded', 1);
@@ -581,6 +582,7 @@ const Settings = {
   },
   async render() {
     $('#setName').value = S.userName;
+    if (typeof Sync !== 'undefined') Sync.renderCard();
     const lastExp = await DB.getMeta('lastExport');
     let photoBytes = 0;
     for (const t of S.topics) for (const b of (t.shots || [])) photoBytes += b.size || 0;
